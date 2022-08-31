@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import PageContainer from "../components/PageContainer";
 import HomeBanner from "components/HomeBanner";
+import HomePackagesSlider from "components/HomePackagesSlider";
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +13,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageContainer>
-        <HomeBanner />
+        {/* <HomeBanner /> */}
+        <HomePackagesSlider />
       </PageContainer>
     </>
   );

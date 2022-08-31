@@ -10,6 +10,7 @@ module.exports = {
       F2F5F7: "#F2F5F7",
       "191C62": "#191C62",
       B95F1E: "#B95F1E",
+      E7EAEE: "#E7EAEE",
     },
     maxWidth: {
       "2xl": "15rem",
