@@ -12,6 +12,7 @@ module.exports = {
       B95F1E: "#B95F1E",
     },
     maxWidth: {
+      "2xl": "15rem",
       "8xl": "90rem",
     },
   },

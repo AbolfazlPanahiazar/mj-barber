@@ -1,23 +1,23 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { FaBars } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
-import { IoLogoWhatsapp } from "react-icons/io";
+import { IoLogoWhatsapp, IoMdCall } from "react-icons/io";
+
+import HamburgerMenu from "./HamburgerMenu";
 
 const Header: FC = () => {
   const { asPath } = useRouter();
+  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] =
+    useState<boolean>(false);
 
-  const openHamburgerMenu = () => {};
+  const openHamburgerMenu = () => {
+    setIsHamburgerMenuOpen(true);
+  };
 
-  const linkTextHandler = (link: string) => {
-    console.log(asPath);
-    console.log(link);
-    if (asPath === link) {
-      return "text-B95F1E";
-    } else {
-      return "text-191C62";
-    }
+  const closeHamburgerMenu = () => {
+    setIsHamburgerMenuOpen(false);
   };
 
   return (
@@ -25,6 +25,10 @@ const Header: FC = () => {
       <div className="w-full h-full flex lg:hidden justify-between items-center">
         <img src="mj.png" alt="mj barber logo" className="h-9" />
         <FaBars size={20} onClick={openHamburgerMenu} />
+        <HamburgerMenu
+          isOpen={isHamburgerMenuOpen}
+          closeMenu={closeHamburgerMenu}
+        />
       </div>
       <div className="w-full h-full hidden lg:flex items-center">
         <div className="h-full flex items-center">
@@ -105,7 +109,7 @@ const Header: FC = () => {
             href="tel:+905323977073"
             className="flex items-center"
           >
-            <AiFillInstagram size={25} color="#B95F1E" className="mr-1" />
+            <IoMdCall size={25} color="#B95F1E" className="mr-1" />
             <span className="text-B95F1E text-xs">+90 532 397 70 73</span>
           </a>
         </div>
