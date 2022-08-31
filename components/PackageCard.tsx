@@ -12,7 +12,7 @@ const PackageCard: FC = () => {
           dolor sit amet, consectetur adipiscing elit, sed doLorem ipsum dolor
           sit amet, consectetur adipiscing elit, sed do
         </span>
-        <div className="w-full mt-2 text-B95F1E flex justify-center">
+        <div className="w-full mt-4 text-B95F1E flex justify-center">
           <span className="text-xl px-2 font-semibold">12$</span>
           <span className="text-xl px-2 font-semibold border-x">12$</span>
           <span className="text-xl px-2 font-semibold">12$</span>
