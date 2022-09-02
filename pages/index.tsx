@@ -5,6 +5,7 @@ import PageContainer from "../components/PageContainer";
 import HomeBanner from "components/HomeBanner";
 import HomePackagesSlider from "components/HomePackagesSlider";
 import HomeAboutUs from "components/HomeAboutUs";
+import Footer from "components/Footer";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
         <HomeBanner />
         <HomePackagesSlider />
         <HomeAboutUs />
+        <Footer />
       </PageContainer>
     </>
   );
