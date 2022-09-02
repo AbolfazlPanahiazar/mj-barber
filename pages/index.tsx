@@ -4,6 +4,7 @@ import Head from "next/head";
 import PageContainer from "../components/PageContainer";
 import HomeBanner from "components/HomeBanner";
 import HomePackagesSlider from "components/HomePackagesSlider";
+import HomeAboutUs from "components/HomeAboutUs";
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
       <PageContainer>
         <HomeBanner />
         <HomePackagesSlider />
+        <HomeAboutUs />
       </PageContainer>
     </>
   );

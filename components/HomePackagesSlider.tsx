@@ -12,7 +12,7 @@ const HomePackagesSlider: FC = () => {
         </span>
         <div className="hidden lg:block">
           <Link href="/packages">
-            <span className="font-bold text-sm cursor-pointer hover:underline">
+            <span className="font-bold text-sm cursor-pointer hover:underline text-191C62">
               SEE All
             </span>
           </Link>
@@ -24,6 +24,13 @@ const HomePackagesSlider: FC = () => {
           <PackageCard />
           <PackageCard />
         </div>
+      </div>
+      <div className="w-full flex justify-center mt-6 lg:hidden">
+        <Link href="/packages">
+          <span className="font-bold text-md cursor-pointer hover:underline text-191C62">
+            SEE All Packages
+          </span>
+        </Link>
       </div>
     </div>
   );
