@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import PageContainer from "../components/PageContainer";
+import Footer from "components/Footer";
 
 const Contact: NextPage = () => {
   return (
@@ -11,7 +12,7 @@ const Contact: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageContainer>
-        <div className="bg-orange-600">a</div>
+        <Footer />
       </PageContainer>
     </>
   );
