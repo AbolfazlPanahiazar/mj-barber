@@ -19,6 +19,7 @@ a {
 
 * {
   box-sizing: border-box;
+  outline: none;
 }
 
 @media (prefers-color-scheme: dark) {

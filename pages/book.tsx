@@ -2,6 +2,9 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import PageContainer from "../components/PageContainer";
+import PageTitle from "components/PageTitle";
+import BookTimeForm from "./BookTimeForm";
+import Footer from "components/Footer";
 
 const Book: NextPage = () => {
   return (
@@ -11,7 +14,9 @@ const Book: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageContainer>
-        <div className="bg-orange-600">a</div>
+        <PageTitle title="BOOK A TIME" />
+        <BookTimeForm />
+        <Footer />
       </PageContainer>
     </>
   );

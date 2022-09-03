@@ -1,6 +1,10 @@
 import { FC } from "react";
 
-const PackageCard: FC = () => {
+interface IPackageCardProps {
+  selecable?: boolean;
+}
+
+const PackageCard: FC<IPackageCardProps> = ({ selecable }) => {
   return (
     <div className="w-full">
       <img className="w-full" src="packageSample.jpg" alt="package name" />
@@ -18,9 +22,23 @@ const PackageCard: FC = () => {
           <span className="text-xl px-2 font-semibold">12$</span>
         </div>
         <div className="w-full flex justify-center mt-2">
-          <button className="border-2 border-B95F1E text-B95F1E font-bold text-lg p-2 hover:text-E7EAEE hover:bg-B95F1E transition-all ease-out duration-200">
-            BOOK NOW
-          </button>
+          {selecable ? (
+            <>
+              {false ? (
+                <button className="border-2 border-191C62 text-191C62 font-bold text-lg px-4 mt-1 py-2 hover:text-E7EAEE hover:bg-191C62 transition-all ease-out duration-200">
+                  REMOVE
+                </button>
+              ) : (
+                <button className="border-2 border-B95F1E text-B95F1E font-bold text-lg px-4 mt-1 py-2 hover:text-E7EAEE hover:bg-B95F1E transition-all ease-out duration-200">
+                  ADD
+                </button>
+              )}
+            </>
+          ) : (
+            <button className="border-2 border-B95F1E text-B95F1E font-bold text-lg px-4 mt-1 py-2 hover:text-E7EAEE hover:bg-B95F1E transition-all ease-out duration-200">
+              BOOK NOW
+            </button>
+          )}
         </div>
       </div>
     </div>
