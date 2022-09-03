@@ -4,6 +4,7 @@ import Head from "next/head";
 import PageContainer from "../components/PageContainer";
 import PageTitle from "components/PageTitle";
 import PackageCard from "components/PackageCard";
+import Footer from "components/Footer";
 
 const Packages: NextPage = () => {
   return (
@@ -19,6 +20,7 @@ const Packages: NextPage = () => {
             <PackageCard />
           ))}
         </div>
+        <Footer />
       </PageContainer>
     </>
   );
