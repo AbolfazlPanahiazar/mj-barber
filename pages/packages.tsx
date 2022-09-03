@@ -2,6 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import PageContainer from "../components/PageContainer";
+import PageTitle from "components/PageTitle";
+import PackageCard from "components/PackageCard";
 
 const Packages: NextPage = () => {
   return (
@@ -11,7 +13,12 @@ const Packages: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageContainer>
-        <div className="bg-orange-600">a</div>
+        <PageTitle title="MJ PACKAGES" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+            <PackageCard />
+          ))}
+        </div>
       </PageContainer>
     </>
   );

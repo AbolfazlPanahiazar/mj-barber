@@ -8,7 +8,7 @@ const Contact: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Contact Page | MJ Barber</title>
+        <title>Contact Page | MJ Barber</title> 
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageContainer>
