@@ -23,7 +23,7 @@ const registerAdminSchema = Joi.object({
 });
 
 export default connect()
-  // .use(authMiddleWare)
+  .use(authMiddleWare)
   .post(
     validate({ body: registerAdminSchema }),
     async (req: NextApiRequest, res: NextApiResponse) => {
