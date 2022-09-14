@@ -1,7 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connect from "next-connect";
 import Joi from "joi";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 import { validate } from "middleware/validation";
+import { connect as mongoConnnect } from "utils/connection";
+
+const { JWT_SERCERT_KEY } = process.env;
 
 const loginSchema = Joi.object({
   username: Joi.string().required().min(10).messages({
@@ -20,9 +26,16 @@ const loginSchema = Joi.object({
 
 export default connect().post(
   validate({ body: loginSchema }),
-  (req: NextApiRequest, res: NextApiResponse) => {
-    return res
-      .status(200)
-      .json({ token: process.env.BARBER_TOKEN + `__${Date.now()}` });
+  async (req: NextApiRequest, res: NextApiResponse) => {
+    const { Admin } = await mongoConnnect();
+    const admin = await Admin.findOne({
+      username: req.body.username,
+    });
+    if (!admin || !bcrypt.compareSync(req.body.password, admin.password)) {
+      return res.status(401).json({ message: "Invalid username or password." });
+    }
+    return res.status(200).json({
+      token: jwt.sign({ username: admin.username }, JWT_SERCERT_KEY as string),
+    });
   }
 );
