@@ -1,65 +1,95 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import connect from "next-connect";
+import Joi from "joi";
+import { validate } from "middleware/validation";
 
-import { IPackage } from "types";
-import { connect } from "utils/connection";
+import { connect as mongoConnnect } from "utils/connection";
+import { authMiddleWare } from "middleware/auth";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // const token = req.headers.authorization;
-  // if (!token || token.split("__").length !== 2) {
-  //   return res
-  //     .status(401)
-  //     .json({ message: "you don't have access to this section" });
-  // }
-  // const accessToken = token?.split("__")[0];
-  // const timeStamp = token?.split("__")[1];
-  // if (
-  //   accessToken !== process.env.BARBER_TOKEN ||
-  //   Date.now() - +timeStamp > 86400000
-  // ) {
-  //   return res
-  //     .status(401)
-  //     .json({ message: "you don't have access to this section" });
-  // }
+const packageSchema = Joi.object({
+  title: Joi.string().required().min(3).messages({
+    "string.base": `"title" should be a type of 'text'`,
+    "string.empty": `"title" cannot be an empty field`,
+    "string.min": `"title" should have a minimum length of {#limit}`,
+    "any.required": `"title" is a required field`,
+  }),
+  priceTRY: Joi.number().required().min(1).messages({
+    "string.base": `"priceTRY" should be a type of 'text'`,
+    "string.empty": `"priceTRY" cannot be an empty field`,
+    "string.min": `"priceTRY" should have a minimum length of {#limit}`,
+    "any.required": `"priceTRY" is a required field`,
+  }),
+  priceUSD: Joi.number().required().min(1).messages({
+    "string.base": `"priceUSD" should be a type of 'text'`,
+    "string.empty": `"priceUSD" cannot be an empty field`,
+    "string.min": `"priceUSD" should have a minimum length of {#limit}`,
+    "any.required": `"priceUSD" is a required field`,
+  }),
+  priceEUR: Joi.number().required().min(1).messages({
+    "string.base": `"priceEUR" should be a type of 'text'`,
+    "string.empty": `"priceEUR" cannot be an empty field`,
+    "string.min": `"priceEUR" should have a minimum length of {#limit}`,
+    "any.required": `"priceEUR" is a required field`,
+  }),
+  description: Joi.string().required().min(10).messages({
+    "string.base": `"description" should be a type of 'text'`,
+    "string.empty": `"description" cannot be an empty field`,
+    "string.min": `"description" should have a minimum length of {#limit}`,
+    "any.required": `"description" is a required field`,
+  }),
+  image: Joi.string().required().min(3).messages({
+    "string.base": `"image" should be a type of 'text'`,
+    "string.empty": `"image" cannot be an empty field`,
+    "string.min": `"image" should have a minimum length of {#limit}`,
+    "any.required": `"image" is a required field`,
+  }),
+});
 
-  const { Package } = await connect();
+export default connect()
+  .get(async (req: NextApiRequest, res: NextApiResponse) => {
+    const { Package } = await mongoConnnect();
+    const allPackage = await Package.find();
+    return res.status(200).json({ packages: allPackage });
+  })
+  .use(authMiddleWare)
+  .post(
+    validate({ body: packageSchema }),
+    async (req: NextApiRequest, res: NextApiResponse) => {
+      const { Package } = await mongoConnnect();
+      const newPackage = new Package({
+        title: req.body.title,
+        priceTRY: req.body.priceTRY,
+        priceUSD: req.body.priceUSD,
+        priceEUR: req.body.priceEUR,
+        description: req.body.description,
+        image: req.body.image,
+      });
+      await newPackage.save();
+      return res
+        .status(200)
+        .json({ message: "New package created successfully." });
+    }
+  );
 
-  // create package
-  // const newPackage = new Package({
-  //   title: "test title 1",
-  //   priceTRY: 12,
-  //   priceUSD: 13,
-  //   priceEUR: 14,
-  //   description: "test description",
-  //   image: "test image url",
-  // });
-  // await newPackage.save();
+// read all packages
+// const allPackage = await Package.find();
 
-  // read all packages
-  // const allPackage = await Package.find();
+// read one package
+// const thePackage = await Package.findById("632238e4477d8a24231ced53");
 
-  // read one package
-  // const thePackage = await Package.findById("632238e4477d8a24231ced53");
+// edit package
+// await Package.findByIdAndUpdate(
+//   "632238e4477d8a24231ced53",
+//   {
+//     title: "test title 5",
+//     priceTRY: 120,
+//     priceUSD: 1,
+//     priceEUR: 104,
+//     description: "test description",
+//     image: "test image url",
+//   },
+//   { new: true }
+// );
 
-  // edit package
-  // await Package.findByIdAndUpdate(
-  //   "632238e4477d8a24231ced53",
-  //   {
-  //     title: "test title 5",
-  //     priceTRY: 120,
-  //     priceUSD: 1,
-  //     priceEUR: 104,
-  //     description: "test description",
-  //     image: "test image url",
-  //   },
-  //   { new: true }
-  // );
-
-  // delete item
-  await Package.findByIdAndDelete("632238e4477d8a24231ced53");
-
-  // return packages from db
-  res.status(200).json({ packages: [] });
-}
+// delete item
+// await Package.findByIdAndDelete("632238e4477d8a24231ced53");
