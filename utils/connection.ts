@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import { IPackage, IAdmin } from "types";
+import { IPackage, IAdmin, IBarber } from "types";
 
 const { MONGODB_URI } = process.env;
 
