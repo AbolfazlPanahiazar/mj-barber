@@ -1,32 +1,27 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 // import { toast } from 'react-toastify';
 
 // import { API_BASE_URL } from 'constants/env';
-// import { STORAGE_PERSIST_KEY } from 'constants/env';
+
+const { NEXT_PUBLIC_STORAGE_KEY } = process.env;
 
 interface IAuthenticatedUser {
   token: string;
-  username: string;
 }
 
-// const storageKey = STORAGE_PERSIST_KEY;
+const storageKey = NEXT_PUBLIC_STORAGE_KEY;
 
 const removeAuthenticatedUserFromStorage = () => {
-//   window['localStorage'].removeItem(storageKey);
+  window["localStorage"].removeItem(storageKey);
 };
 
 const getAuthenticatedUserFromStorage = (): string | null => {
-  const isBrowser: boolean = ((): boolean => typeof window !== 'undefined')();
-  return isBrowser ? window['localStorage'][''] : null;
+  const isBrowser: boolean = ((): boolean => typeof window !== "undefined")();
+  return isBrowser ? window["localStorage"][storageKey] : null;
 };
 
 const customAxios = axios.create({
-  baseURL: "",
-  responseType: 'json',
   timeout: 30000,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
 });
 
 const useRequestHandler = (request: AxiosRequestConfig) => {
@@ -49,8 +44,8 @@ const usErrorHandler = (error: AxiosError) => {
   if (error.response?.status === 401) {
     // toast.error('Please login again');
     removeAuthenticatedUserFromStorage();
-    const isBrowser: boolean = ((): boolean => typeof window !== 'undefined')();
-    isBrowser && window.location.replace('/sign-in');
+    const isBrowser: boolean = ((): boolean => typeof window !== "undefined")();
+    isBrowser && window.location.replace("/admin/login");
   }
   return Promise.reject(error);
 };

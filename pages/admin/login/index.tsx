@@ -1,9 +1,38 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
-import PageContainer from "components/PageContainer";
+import { login } from "../../../api/login";
+import { useAuth } from "../../../hooks/useAuth";
+
+export interface IInputs {
+  emailUsername: string;
+  password: string;
+}
 
 const Admin: NextPage = () => {
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const { push } = useRouter();
+  const { saveAuthenticatedUser } = useAuth();
+
+  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    login(userName, password)
+      .then((res) => {
+        console.log("res", res);
+        saveAuthenticatedUser({ token: res.data.token });
+      })
+      .catch((error) => {
+        console.log("error", error.message);
+      });
+  };
+
+  // console.log('userName' ,userName);
+  // console.log('password' ,password);
+
   return (
     <>
       <Head>
@@ -17,17 +46,16 @@ const Admin: NextPage = () => {
       >
         <form
           className="p-10 bg-white rounded-xl drop-shadow-lg space-y-5"
-          action=""
+          onSubmit={submitHandler}
         >
           <h1 className="text-center text-3xl">MJ Admin Login</h1>
           <div className="flex flex-col ml-2 space-y-2">
             <label className="text-sm font-light">Email</label>
             <input
               className="sm:w-96 w-72 px-3 py-2 rounded-md border border-slate-400"
-              type="email"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               placeholder="Your Email"
-              name="email"
-              id="email"
             />
           </div>
           <div className="flex flex-col ml-2 space-y-2">
@@ -36,8 +64,8 @@ const Admin: NextPage = () => {
               className="sm:w-96 w-72 px-3 py-2 rounded-md border border-slate-400"
               type="password"
               placeholder="Your Password"
-              name="password"
-              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -45,6 +73,7 @@ const Admin: NextPage = () => {
             className="w-full px-10 py-2 bg-blue-600 text-white rounded-md
             hover:bg-blue-500 hover:drop-shadow-md duration-300 ease-in"
             type="submit"
+            value="submit"
           >
             Login
           </button>
