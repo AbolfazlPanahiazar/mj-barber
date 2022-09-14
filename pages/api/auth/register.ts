@@ -5,6 +5,7 @@ import { validate } from "middleware/validation";
 import bcrypt from "bcrypt";
 
 import { connect as mongoConnnect } from "utils/connection";
+import { authMiddleWare } from "middleware/auth";
 
 const registerAdminSchema = Joi.object({
   username: Joi.string().required().min(10).messages({
@@ -21,18 +22,20 @@ const registerAdminSchema = Joi.object({
   }),
 });
 
-export default connect().post(
-  validate({ body: registerAdminSchema }),
-  async (req: NextApiRequest, res: NextApiResponse) => {
-    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-    const { Admin } = await mongoConnnect();
-    const newAdmin = new Admin({
-      username: req.body.username,
-      password: hashedPassword,
-    });
-    await newAdmin.save();
-    return res
-      .status(200)
-      .json({ message: "New admin registered successfully." });
-  }
-);
+export default connect()
+  .use(authMiddleWare)
+  .post(
+    validate({ body: registerAdminSchema }),
+    async (req: NextApiRequest, res: NextApiResponse) => {
+      const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+      const { Admin } = await mongoConnnect();
+      const newAdmin = new Admin({
+        username: req.body.username,
+        password: hashedPassword,
+      });
+      await newAdmin.save();
+      return res
+        .status(200)
+        .json({ message: "New admin registered successfully." });
+    }
+  );
