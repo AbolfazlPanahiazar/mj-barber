@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "joi": "^17.6.0",
     "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.1",
     "next": "12.2.5",
     "next-connect": "^0.13.0",
@@ -21,6 +23,7 @@
     "react-photo-album": "^1.16.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "18.7.13",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",

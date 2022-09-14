@@ -2,8 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connect from "next-connect";
 import Joi from "joi";
 import { validate } from "middleware/validation";
+import bcrypt from "bcrypt";
 
-const loginSchema = Joi.object({
+import { connect as mongoConnnect } from "utils/connection";
+
+const registerAdminSchema = Joi.object({
   username: Joi.string().required().min(10).messages({
     "string.base": `"username" should be a type of 'text'`,
     "string.empty": `"username" cannot be an empty field`,
@@ -19,10 +22,17 @@ const loginSchema = Joi.object({
 });
 
 export default connect().post(
-  validate({ body: loginSchema }),
-  (req: NextApiRequest, res: NextApiResponse) => {
+  validate({ body: registerAdminSchema }),
+  async (req: NextApiRequest, res: NextApiResponse) => {
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+    const { Admin } = await mongoConnnect();
+    const newAdmin = new Admin({
+      username: req.body.username,
+      password: hashedPassword,
+    });
+    await newAdmin.save();
     return res
       .status(200)
-      .json({ token: process.env.BARBER_TOKEN + `__${Date.now()}` });
+      .json({ message: "New admin registered successfully." });
   }
 );

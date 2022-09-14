@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ObjectId, objectI } from "mongoose";
 
 import { IPackage } from "types";
 import { connect } from "utils/connection";

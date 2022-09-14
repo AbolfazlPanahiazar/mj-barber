@@ -1,6 +1,6 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-import { IPackage } from "types";
+import { IPackage, IAdmin } from "types";
 
 const { MONGODB_URI } = process.env;
 
@@ -10,7 +10,6 @@ export const connect = async () => {
     .catch((err) => console.log(err));
   console.log("Mongoose Connection Established");
 
-  // OUR PACKAGE SCHEMA
   const packageSchema = new Schema<IPackage>({
     title: { type: String, required: true },
     priceTRY: { type: Number, required: true },
@@ -19,10 +18,14 @@ export const connect = async () => {
     description: { type: String, required: true },
     image: { type: String, required: true },
   });
-
-  // OUR PACKAGE MODEL
   const Package =
     mongoose.models.Package || mongoose.model("Package", packageSchema);
 
-  return { conn, Package };
+  const adminSchema = new Schema<IAdmin>({
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+  });
+  const Admin = mongoose.models.Admin || mongoose.model("Admin", adminSchema);
+
+  return { conn, Package, Admin };
 };
