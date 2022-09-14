@@ -4,14 +4,11 @@ export enum IPackagePriceCurrency {
   EUR = "EUR",
 }
 
-export interface IPackagePrice {
-  amount: number;
-  currency: IPackagePriceCurrency;
-}
-
 export interface IPackage {
   title: string;
-  price: IPackagePrice;
+  priceTRY: number;
+  priceUSD: number;
+  priceEUR: number;
   description: string;
   image: string;
 }
