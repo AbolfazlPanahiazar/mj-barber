@@ -1,18 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import connect from "next-connect";
+import Joi from "joi";
+import { validate } from "middleware/validation";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const body = req.body;
-  if (
-    req.method === "POST" &&
-    body?.username &&
-    body?.password &&
-    body.username === process.env.BARBER_NAME &&
-    body.password === process.env.BARBER_PASS
-  ) {
+const loginSchema = Joi.object({
+  username: Joi.string().required().min(6).messages({
+    "string.base": `"username" should be a type of 'text'`,
+    "string.empty": `"username" cannot be an empty field`,
+    "string.min": `"username" should have a minimum length of {#limit}`,
+    "any.required": `"username" is a required field`,
+  }),
+  password: Joi.string().required().min(6).messages({
+    "string.base": `"password" should be a type of 'text'`,
+    "string.empty": `"password" cannot be an empty field`,
+    "string.min": `"password" should have a minimum length of {#limit}`,
+    "any.required": `"password" is a required field`,
+  }),
+});
+
+export default connect().post(
+  validate({ body: loginSchema }),
+  (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(200)
-      .json({ token: process.env.BARBER_TOKEN + `__${Date.now()}`});
-  } else {
-    res.status(401).json({ message: "Your username or password is incorrect" });
+      .json({ token: process.env.BARBER_TOKEN + `__${Date.now()}` });
   }
-}
+);

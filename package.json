@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "joi": "^17.6.0",
     "mongoose": "^6.6.1",
     "next": "12.2.5",
+    "next-connect": "^0.13.0",
+    "next-joi": "^2.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
