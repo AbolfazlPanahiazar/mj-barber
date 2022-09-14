@@ -1,17 +1,101 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import connect from "next-connect";
+import Joi from "joi";
+import { validate } from "middleware/validation";
 
-import { IPackage } from "types";
+import { connect as mongoConnnect } from "utils/connection";
+import { authMiddleWare } from "middleware/auth";
 
-type ResponseData = {
-  packages: IPackage[];
-};
+const packageSchema = Joi.object({
+  title: Joi.string().required().min(3).messages({
+    "string.base": `"title" should be a type of 'text'`,
+    "string.empty": `"title" cannot be an empty field`,
+    "string.min": `"title" should have a minimum length of {#limit}`,
+    "any.required": `"title" is a required field`,
+  }),
+  priceTRY: Joi.number().required().min(1).messages({
+    "string.base": `"priceTRY" should be a type of 'text'`,
+    "string.empty": `"priceTRY" cannot be an empty field`,
+    "string.min": `"priceTRY" should have a minimum length of {#limit}`,
+    "any.required": `"priceTRY" is a required field`,
+  }),
+  priceUSD: Joi.number().required().min(1).messages({
+    "string.base": `"priceUSD" should be a type of 'text'`,
+    "string.empty": `"priceUSD" cannot be an empty field`,
+    "string.min": `"priceUSD" should have a minimum length of {#limit}`,
+    "any.required": `"priceUSD" is a required field`,
+  }),
+  priceEUR: Joi.number().required().min(1).messages({
+    "string.base": `"priceEUR" should be a type of 'text'`,
+    "string.empty": `"priceEUR" cannot be an empty field`,
+    "string.min": `"priceEUR" should have a minimum length of {#limit}`,
+    "any.required": `"priceEUR" is a required field`,
+  }),
+  description: Joi.string().required().min(10).messages({
+    "string.base": `"description" should be a type of 'text'`,
+    "string.empty": `"description" cannot be an empty field`,
+    "string.min": `"description" should have a minimum length of {#limit}`,
+    "any.required": `"description" is a required field`,
+  }),
+  image: Joi.string().required().min(3).messages({
+    "string.base": `"image" should be a type of 'text'`,
+    "string.empty": `"image" cannot be an empty field`,
+    "string.min": `"image" should have a minimum length of {#limit}`,
+    "any.required": `"image" is a required field`,
+  }),
+});
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  const body = req.body;
-  const query = req.query;
-  const coockies = req.cookies;
-  res.status(200).json({ packages: [] });
-}
+export default connect()
+  .get(async (req: NextApiRequest, res: NextApiResponse) => {
+    const { packageId } = req.query;
+    if (!packageId)
+      return res.status(400).json({ message: "Package not found." });
+    const { Package } = await mongoConnnect();
+    try {
+      const thePackage = await Package.findById(packageId);
+      return res.status(200).json({ package: thePackage });
+    } catch (err) {
+      return res.status(400).json({ message: "Package not found." });
+    }
+  })
+  .use(authMiddleWare)
+  .put(
+    validate({ body: packageSchema }),
+    async (req: NextApiRequest, res: NextApiResponse) => {
+      const { packageId } = req.query;
+      if (!packageId)
+        return res.status(400).json({ message: "Package not found." });
+      const { Package } = await mongoConnnect();
+      try {
+        await Package.findByIdAndUpdate(
+          packageId,
+          {
+            title: req.body.title,
+            priceTRY: req.body.priceTRY,
+            priceUSD: req.body.priceUSD,
+            priceEUR: req.body.priceEUR,
+            description: req.body.description,
+            image: req.body.image,
+          },
+          { new: true }
+        );
+        return res
+          .status(200)
+          .json({ message: "Package updated successfully." });
+      } catch (err) {
+        return res.status(400).json({ message: "Package not found." });
+      }
+    }
+  )
+  .delete(async (req: NextApiRequest, res: NextApiResponse) => {
+    const { packageId } = req.query;
+    if (!packageId)
+      return res.status(400).json({ message: "Package not found." });
+    const { Package } = await mongoConnnect();
+    try {
+      await Package.findByIdAndDelete(packageId);
+      return res.status(200).json({ message: "Package deleted successfully." });
+    } catch (err) {
+      return res.status(400).json({ message: "Package not found." });
+    }
+  });
