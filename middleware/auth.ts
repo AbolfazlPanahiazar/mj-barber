@@ -18,7 +18,6 @@ export const authMiddleWare = async (
       req.headers.authorization,
       JWT_SERCERT_KEY as string
     );
-    console.log(data);
     next();
   } catch (err) {
     return res.status(401).json({

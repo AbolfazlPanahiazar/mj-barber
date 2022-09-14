@@ -27,5 +27,11 @@ export const connect = async () => {
   });
   const Admin = mongoose.models.Admin || mongoose.model("Admin", adminSchema);
 
-  return { conn, Package, Admin };
+  const barberSchema = new Schema<IBarber>({
+    fullname: { type: String, required: true },
+  });
+  const Barber =
+    mongoose.models.Barber || mongoose.model("Barber", barberSchema);
+
+  return { conn, Package, Admin, Barber };
 };
