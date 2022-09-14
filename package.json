@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "joi": "^17.6.0",
+    "axios": "^0.27.2",
     "mongoose": "^6.6.1",
     "next": "12.2.5",
     "next-connect": "^0.13.0",
