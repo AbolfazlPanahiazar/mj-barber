@@ -56,21 +56,16 @@ const BookTimeForm: FC = () => {
 
   const orderHandler = () => {
     axios
-      .post<never, AxiosResponse<any>>("/api/orders", {
+      .post<any, AxiosResponse<any>>("/api/orders", {
         fullname: fullName,
         phoneNumber: phoneNumber,
         barberId: barberId,
         datetime: date,
+        email: email,
         address: address,
         packageIds: packagesIds,
       })
       .then((res) => {
-        setAddress("");
-        setFullName("");
-        setDate("");
-        setPhoneNumber("");
-        setEmail("");
-        setPackagesIds([]);
         push("/");
         toast.success(`${res.data.message}`);
       })

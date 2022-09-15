@@ -1,13 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import {useRouter} from 'next/router'
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 import Header from "components/Admin/Header/Header";
 import { getOrders, deleteOrder } from "api";
 import { FiDelete } from "react-icons/fi";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface IOrders {
   _id: string;
@@ -24,10 +26,19 @@ interface IOrders {
 
 const Order: NextPage = () => {
   const [orders, setOrders] = useState<IOrders[]>([]);
+  const {isAuthenticated} = useAuth()
+  const {push} = useRouter()
+
+  useEffect(()=> {
+    if(!isAuthenticated){
+    push('/admin/login')
+    }
+  },[])
 
   useEffect(() => {
     getOrders()
       .then((res) => {
+        console.log(res);
         setOrders(res.data.orders);
       })
       .catch((error) => toast.error(`${error.response.data.message}`));
@@ -96,25 +107,24 @@ const Order: NextPage = () => {
                         className="text-2xl hover:underline mx-2"
                         onClick={() => {
                           Swal.fire({
-                            title: 'Are you sure?',
+                            title: "Are you sure?",
                             text: "You won't be able to revert this!",
-                            icon: 'warning',
+                            icon: "warning",
                             showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
                           }).then((result) => {
                             if (result.isConfirmed) {
                               deleteOrder(order._id)
-                            .then((res) => {
-                              toast.success(`${res.data.message}`);
-                            })
-                            .catch((err) => {
-                              toast.error(`${err.response.data.message}`);
-                            });
+                                .then((res) => {
+                                  toast.success(`${res.data.message}`);
+                                })
+                                .catch((err) => {
+                                  toast.error(`${err.response.data.message}`);
+                                });
                             }
-                          })
-                          
+                          });
                         }}
                       >
                         <FiDelete />

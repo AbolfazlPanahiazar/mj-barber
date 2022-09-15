@@ -45,21 +45,15 @@ const HomePackagesSlider: FC = () => {
       </div>
       <div className="w-full px-10 lg:px-28 mt-3 lg:mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <PackageCard
-            packages={packages[0]}
-            packagesIds={[]}
-            setPackagesIds={() => {}}
-          />
-          <PackageCard
-            packages={packages[1]}
-            packagesIds={[]}
-            setPackagesIds={() => {}}
-          />
-          <PackageCard
-            packages={packages[2]}
-            packagesIds={[]}
-            setPackagesIds={() => {}}
-          />
+          {packages.map((pack, index) =>
+            index < 3 ? (
+              <PackageCard
+                packages={pack}
+                packagesIds={[]}
+                setPackagesIds={() => {}}
+              />
+            ) : null
+          )}
         </div>
       </div>
       <div className="w-full flex justify-center mt-6 lg:hidden">
