@@ -80,6 +80,7 @@ const Barber: NextPage = () => {
             onClick={() => {
               setFullName("");
               setIsCreateBarberOpen(true);
+              window.scrollTo(0, 0);
             }}
             className="inline-block px-6 py-2.5 bg-E7EAEE text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-F2F5F7 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
           >
@@ -120,7 +121,7 @@ const Barber: NextPage = () => {
                     }}
                     className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
                   >
-                    Cancell
+                    Cancel
                   </button>
                 </div>
               </form>
@@ -162,7 +163,7 @@ const Barber: NextPage = () => {
                     }}
                     className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
                   >
-                    Cancell
+                    Cancel
                   </button>
                 </div>
               </form>
@@ -204,6 +205,7 @@ const Barber: NextPage = () => {
                           setFullName(bar.fullname);
                           setBarberId(bar._id);
                           setIsEditBarberOpen(true);
+                          window.scrollTo(0, 0);
                         }}
                         className="text-2xl hover:underline mx-2"
                       >
