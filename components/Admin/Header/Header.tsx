@@ -1,9 +1,10 @@
 import { FC } from "react";
-import { useRouter } from "next/router";
+
 import Link from "next/link";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Header: FC = () => {
-  const { push } = useRouter();
+  const { logout } = useAuth();
   return (
     <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -25,6 +26,18 @@ const Header: FC = () => {
           <Link href="/admin/orders" passHref>
             <a className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white">
               Orders
+            </a>
+          </Link>
+        </div>
+        <div>
+          <Link href="/admin/login" passHref>
+            <a
+              onClick={() => {
+                logout();
+              }}
+              className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white"
+            >
+              Logout
             </a>
           </Link>
         </div>

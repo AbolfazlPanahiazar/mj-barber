@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import {useRouter} from 'next/router'
+import { useRouter } from "next/router";
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -17,6 +17,7 @@ interface IOrders {
   phoneNumber: string;
   barberId: string;
   barberName: string;
+  email: string;
   datetime: string;
   address: string;
   packageIds: string[];
@@ -26,19 +27,19 @@ interface IOrders {
 
 const Order: NextPage = () => {
   const [orders, setOrders] = useState<IOrders[]>([]);
-  const {isAuthenticated} = useAuth()
-  const {push} = useRouter()
+  const { isAuthenticated, logout } = useAuth();
+  const { push } = useRouter();
 
-  useEffect(()=> {
-    if(!isAuthenticated){
-    push('/admin/login')
+  useEffect(() => {
+    if (!isAuthenticated) {
+      logout();
+      push("/admin/login");
     }
-  },[])
+  }, []);
 
   useEffect(() => {
     getOrders()
       .then((res) => {
-        console.log(res);
         setOrders(res.data.orders);
       })
       .catch((error) => toast.error(`${error.response.data.message}`));
@@ -57,24 +58,30 @@ const Order: NextPage = () => {
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Customer
                 </th>
+                <th scope="col" className="py-3 px-3">
+                  PhoneNumber
+                </th>
+                <th scope="col" className="py-3 px-3">
+                  Email
+                </th>
 
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Barber
                 </th>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Date & Time
                 </th>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Address
                 </th>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Packages
                 </th>
 
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-3 px-3">
                   Action
                 </th>
               </tr>
@@ -88,20 +95,22 @@ const Order: NextPage = () => {
                   >
                     <th
                       scope="row"
-                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className="py-4 px-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {order.fullname}
                     </th>
-                    <td className="py-4 px-6"> {order.barberName}</td>
-                    <td className="py-4 px-6">
+                    <td className="py-4 px-3"> {order.phoneNumber}</td>
+                    <td className="py-4 px-3"> {order.email}</td>
+                    <td className="py-4 px-3"> {order.barberName}</td>
+                    <td className="py-4 px-3">
                       {order.datetime.split("T").join(" &  ")}
                     </td>
-                    <td className="py-4 px-6"> {order.address}</td>
-                    <td className="py-4 px-6">
+                    <td className="py-4 px-3"> {order.address}</td>
+                    <td className="py-4 px-3">
                       {order.packagesTitles.join(" , ")}
                     </td>
 
-                    <td className="py-4 px-6 flex">
+                    <td className="py-4 px-3 flex">
                       <button
                         type="button"
                         className="text-2xl hover:underline mx-2"

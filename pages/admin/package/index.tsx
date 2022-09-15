@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import React, { useState, useEffect } from "react";
 import { FiEdit, FiDelete } from "react-icons/fi";
@@ -9,6 +10,7 @@ import Swal from "sweetalert2";
 import Header from "components/Admin/Header/Header";
 import FileDropZone from "components/Admin/FileDropZone/FileDropZone";
 import { getPackages, postPackage, deletePackage, editPackage } from "api";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface IPackages {
   title: string;
@@ -33,6 +35,15 @@ const Package: NextPage = () => {
   const [priceUSD, setPriceUSD] = useState<number>(0);
   const [priceTRY, setPriceTRY] = useState<number>(0);
   const [editId, setEditId] = useState<string>("");
+  const { isAuthenticated, logout } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      logout();
+      push("/admin/login");
+    }
+  }, []);
 
   useEffect(() => {
     getPackages()

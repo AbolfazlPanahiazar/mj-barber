@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -8,6 +9,7 @@ import Swal from "sweetalert2";
 import Header from "components/Admin/Header/Header";
 import { postBarbers, getBarbers, editBarbers, deleteBarbers } from "api";
 import { FiEdit, FiDelete } from "react-icons/fi";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface IBarbers {
   _id: string;
@@ -21,6 +23,15 @@ const Barber: NextPage = () => {
   const [barbers, setBarbers] = useState<IBarbers[]>([]);
   const [fullName, setFullName] = useState<string>("");
   const [barberId, setBarberId] = useState<string>("");
+  const { isAuthenticated, logout } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      logout();
+      push("/admin/login");
+    }
+  }, []);
 
   useEffect(() => {
     getBarbers()

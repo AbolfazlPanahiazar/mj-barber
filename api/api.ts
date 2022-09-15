@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 // import { API_BASE_URL } from 'constants/env';
 
@@ -42,7 +42,7 @@ const useResponseHandler = (response: AxiosResponse) => {
 
 const usErrorHandler = (error: AxiosError) => {
   if (error.response?.status === 401) {
-    // toast.error('Please login again');
+    toast.error('Please login again');
     removeAuthenticatedUserFromStorage();
     const isBrowser: boolean = ((): boolean => typeof window !== "undefined")();
     isBrowser && window.location.replace("/admin/login");
