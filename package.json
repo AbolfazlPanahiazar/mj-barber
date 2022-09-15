@@ -26,7 +26,8 @@
     "react-dropzone": "^14.2.2",
     "react-icons": "^4.4.0",
     "react-photo-album": "^1.16.1",
-    "react-toastify": "^9.0.8"
+    "react-toastify": "^9.0.8",
+    "sweetalert2": "^11.4.33"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

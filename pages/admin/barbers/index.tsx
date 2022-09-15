@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 import Header from "components/Admin/Header/Header";
 import { postBarbers, getBarbers, editBarbers, deleteBarbers } from "api";
@@ -174,7 +175,10 @@ const Barber: NextPage = () => {
             <tbody>
               {barbers.map((bar) => {
                 return (
-                  <tr key={bar._id} className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr
+                    key={bar._id}
+                    className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
                     <th
                       scope="row"
                       className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -199,13 +203,25 @@ const Barber: NextPage = () => {
                         type="button"
                         className="text-2xl hover:underline mx-2"
                         onClick={() => {
-                          deleteBarbers(bar._id)
-                            .then((res) => {
-                              toast.success(`${res.data.message}`);
-                            })
-                            .catch((err) => {
-                              toast.error(`${err.response.data.message}`);
-                            });
+                          Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteBarbers(bar._id)
+                                .then((res) => {
+                                  toast.success(`${res.data.message}`);
+                                })
+                                .catch((err) => {
+                                  toast.error(`${err.response.data.message}`);
+                                });
+                            }
+                          });
                         }}
                       >
                         <FiDelete />

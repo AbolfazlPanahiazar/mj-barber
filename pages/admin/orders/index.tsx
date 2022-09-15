@@ -3,11 +3,11 @@ import Head from "next/head";
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Swal from 'sweetalert2'
 
 import Header from "components/Admin/Header/Header";
 import { getOrders, deleteOrder } from "api";
 import { FiDelete } from "react-icons/fi";
-import orders from "pages/api/orders";
 
 interface IOrders {
   _id: string;
@@ -95,13 +95,26 @@ const Order: NextPage = () => {
                         type="button"
                         className="text-2xl hover:underline mx-2"
                         onClick={() => {
-                          deleteOrder(order._id)
+                          Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deleteOrder(order._id)
                             .then((res) => {
                               toast.success(`${res.data.message}`);
                             })
                             .catch((err) => {
                               toast.error(`${err.response.data.message}`);
                             });
+                            }
+                          })
+                          
                         }}
                       >
                         <FiDelete />

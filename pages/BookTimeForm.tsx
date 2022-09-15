@@ -2,6 +2,7 @@ import PackageCard from "components/PackageCard";
 import React, { FC, useState, useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 interface IPackages {
   title: string;
@@ -21,6 +22,7 @@ interface IBarbers {
 }
 
 const BookTimeForm: FC = () => {
+  const { push } = useRouter();
   const [packages, setPackages] = useState<IPackages[]>([]);
   const [fullName, setFullName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -63,6 +65,13 @@ const BookTimeForm: FC = () => {
         packageIds: packagesIds,
       })
       .then((res) => {
+        setAddress("");
+        setFullName("");
+        setDate("");
+        setPhoneNumber("");
+        setEmail("");
+        setPackagesIds([]);
+        push("/");
         toast.success(`${res.data.message}`);
       })
       .catch((error) => {
@@ -112,7 +121,11 @@ const BookTimeForm: FC = () => {
           className="w-full h-11 px-3 text-l font-bold mt-2 bg-F2F5F7 text-191C62 placeholder:text-{#cccccc} border border-191C62"
         >
           {barbers.map((bar) => {
-            return <option key={bar._id} value={bar._id}>{bar.fullname}</option>;
+            return (
+              <option key={bar._id} value={bar._id}>
+                {bar.fullname}
+              </option>
+            );
           })}
         </select>
       </div>
@@ -152,7 +165,7 @@ const BookTimeForm: FC = () => {
       <div className="col-span-1 lg:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {packages.map((pack) => (
           <PackageCard
-          key={pack._id}
+            key={pack._id}
             selecable
             packages={pack}
             setPackagesIds={setPackagesIds}

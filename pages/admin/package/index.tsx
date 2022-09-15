@@ -4,6 +4,7 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import { FiEdit, FiDelete } from "react-icons/fi";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 import Header from "components/Admin/Header/Header";
 import FileDropZone from "components/Admin/FileDropZone/FileDropZone";
@@ -372,7 +373,21 @@ const Package: NextPage = () => {
                       </button>
 
                       <button
-                        onClick={() => deletePackageHandler(pack._id)}
+                        onClick={() => {
+                          Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              deletePackageHandler(pack._id);
+                            }
+                          });
+                        }}
                         type="button"
                         className="text-2xl hover:underline mx-2"
                       >
