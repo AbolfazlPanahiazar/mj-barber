@@ -27,12 +27,12 @@ interface IOrders {
 
 const Order: NextPage = () => {
   const [orders, setOrders] = useState<IOrders[]>([]);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { push } = useRouter();
 
   useEffect(() => {
+
     if (!isAuthenticated) {
-      logout();
       push("/admin/login");
     }
   }, []);

@@ -35,12 +35,12 @@ const Package: NextPage = () => {
   const [priceUSD, setPriceUSD] = useState<number>(0);
   const [priceTRY, setPriceTRY] = useState<number>(0);
   const [editId, setEditId] = useState<string>("");
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { push } = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      logout();
+     
       push("/admin/login");
     }
   }, []);
