@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import {useRouter} from 'next/router'
 
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -25,6 +26,14 @@ interface IOrders {
 
 const Order: NextPage = () => {
   const [orders, setOrders] = useState<IOrders[]>([]);
+  const {isAuthenticated} = useAuth()
+  const {push} = useRouter()
+
+  useEffect(()=> {
+    if(!isAuthenticated){
+    push('/admin/login')
+    }
+  },[])
 
   useEffect(() => {
     getOrders()
