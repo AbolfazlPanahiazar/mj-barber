@@ -32,9 +32,7 @@ const Header: FC = () => {
         <div>
           <Link href="/admin/login" passHref>
             <a
-              onClick={() => {
-                logout();
-              }}
+              onClick={logout}
               className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white"
             >
               Logout
