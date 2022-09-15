@@ -7,29 +7,31 @@ import { toast } from "react-toastify";
 import Header from "components/Admin/Header/Header";
 import { getOrders, deleteOrder } from "api";
 import { FiDelete } from "react-icons/fi";
+import orders from "pages/api/orders";
 
 interface IOrders {
   _id: string;
   fullname: string;
   phoneNumber: string;
   barberId: string;
+  barberName: string;
   datetime: string;
   address: string;
   packageIds: string[];
+  packagesTitles: string[];
   __V: number;
 }
 
 const Order: NextPage = () => {
-  const [Orders, setOrders] = useState<IOrders[]>([]);
+  const [orders, setOrders] = useState<IOrders[]>([]);
 
   useEffect(() => {
     getOrders()
       .then((res) => {
-        console.log(res);
-        setOrders(res.data.Orders);
+        setOrders(res.data.orders);
       })
       .catch((error) => toast.error(`${error.response.data.message}`));
-  }, [Orders]);
+  }, [orders]);
 
   return (
     <>
@@ -45,14 +47,20 @@ const Order: NextPage = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="py-3 px-6">
-                  Order name
+                  Customer
                 </th>
 
                 <th scope="col" className="py-3 px-6">
-                  Image
+                  Barber
                 </th>
                 <th scope="col" className="py-3 px-6">
-                  price EUR
+                  Date & Time
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Address
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Packages
                 </th>
 
                 <th scope="col" className="py-3 px-6">
@@ -61,22 +69,33 @@ const Order: NextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {Orders.map((bar) => {
+              {orders.map((order) => {
                 return (
-                  <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr
+                    key={order._id}
+                    className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
                     <th
                       scope="row"
                       className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {bar.fullname}
+                      {order.fullname}
                     </th>
+                    <td className="py-4 px-6"> {order.barberName}</td>
+                    <td className="py-4 px-6">
+                      {order.datetime.split("T").join(" &  ")}
+                    </td>
+                    <td className="py-4 px-6"> {order.address}</td>
+                    <td className="py-4 px-6">
+                      {order.packagesTitles.join(" , ")}
+                    </td>
 
                     <td className="py-4 px-6 flex">
                       <button
                         type="button"
                         className="text-2xl hover:underline mx-2"
                         onClick={() => {
-                          deleteOrder(bar._id)
+                          deleteOrder(order._id)
                             .then((res) => {
                               toast.success(`${res.data.message}`);
                             })
@@ -90,39 +109,7 @@ const Order: NextPage = () => {
                     </td>
                   </tr>
                 );
-              })} */}
-
-              <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  test
-                </th>
-
-                <td className="py-4 px-6">
-                  <img className="w-10" src={""} />
-                </td>
-                <td className="py-4 px-6"> test</td>
-
-                <td className="py-4 px-6 flex">
-                  <button
-                    type="button"
-                    className="text-2xl hover:underline mx-2"
-                    // onClick={() => {
-                    //   deleteOrder('')
-                    //     .then((res) => {
-                    //       toast.success(`${res.data.message}`);
-                    //     })
-                    //     .catch((err) => {
-                    //       toast.error(`${err.response.data.message}`);
-                    //     });
-                    // }}
-                  >
-                    <FiDelete />
-                  </button>
-                </td>
-              </tr>
+              })}
             </tbody>
           </table>
         </div>

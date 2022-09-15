@@ -44,6 +44,7 @@ const Packages: NextPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {packages.map((pack) => (
             <PackageCard
+            key={pack._id}
               packages={pack}
               packagesIds={[]}
               setPackagesIds={() => {}}

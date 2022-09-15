@@ -112,7 +112,7 @@ const BookTimeForm: FC = () => {
           className="w-full h-11 px-3 text-l font-bold mt-2 bg-F2F5F7 text-191C62 placeholder:text-{#cccccc} border border-191C62"
         >
           {barbers.map((bar) => {
-            return <option value={bar._id}>{bar.fullname}</option>;
+            return <option key={bar._id} value={bar._id}>{bar.fullname}</option>;
           })}
         </select>
       </div>
@@ -152,6 +152,7 @@ const BookTimeForm: FC = () => {
       <div className="col-span-1 lg:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {packages.map((pack) => (
           <PackageCard
+          key={pack._id}
             selecable
             packages={pack}
             setPackagesIds={setPackagesIds}
