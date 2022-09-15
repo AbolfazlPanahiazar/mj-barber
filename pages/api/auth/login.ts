@@ -35,7 +35,9 @@ export default connect().post(
       return res.status(401).json({ message: "Invalid username or password." });
     }
     return res.status(200).json({
-      token: jwt.sign({ username: admin.username }, JWT_SERCERT_KEY as string),
+      token: jwt.sign({ username: admin.username }, JWT_SERCERT_KEY as string, {
+        expiresIn: "10h",
+      }),
     });
   }
 );
