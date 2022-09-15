@@ -11,9 +11,13 @@
   "dependencies": {
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
+    "formidable": "^2.0.1",
+    "fs": "^0.0.1-security",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.1",
+    "multer": "^1.4.5-lts.1",
+    "mv": "^2.1.1",
     "next": "12.2.5",
     "next-connect": "^0.13.0",
     "next-joi": "^2.2.1",
@@ -24,6 +28,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/formidable": "^2.0.5",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "18.7.13",
     "@types/react": "18.0.17",

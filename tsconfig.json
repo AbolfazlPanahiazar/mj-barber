@@ -16,6 +16,6 @@
     "incremental": true,
     "baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "middleware/auth.js", "middleware/validation.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/file/upload.jsj", "middleware/auth.js", "middleware/validation.js"],
   "exclude": ["node_modules"]
 }
