@@ -70,26 +70,3 @@ export default connect()
         .json({ message: "New package created successfully." });
     }
   );
-
-// read all packages
-// const allPackage = await Package.find();
-
-// read one package
-// const thePackage = await Package.findById("632238e4477d8a24231ced53");
-
-// edit package
-// await Package.findByIdAndUpdate(
-//   "632238e4477d8a24231ced53",
-//   {
-//     title: "test title 5",
-//     priceTRY: 120,
-//     priceUSD: 1,
-//     priceEUR: 104,
-//     description: "test description",
-//     image: "test image url",
-//   },
-//   { new: true }
-// );
-
-// delete item
-// await Package.findByIdAndDelete("632238e4477d8a24231ced53");
