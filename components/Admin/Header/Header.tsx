@@ -19,7 +19,7 @@ const Header: FC = () => {
           </Link>
           <Link href="/admin/barbers" passHref>
             <a className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4">
-              BarBers
+              Barbers
             </a>
           </Link>
           <Link href="/admin/orders" passHref>
