@@ -36,10 +36,12 @@ const PackageCard: FC<IPackageCardProps> = ({
     setPackagesIds(copyPackage);
   };
   return (
-    <div className="w-full">
+    <div className="w-full h-full bg-E7EAEE flex flex-col">
       <img className="w-full" src={packages?.image} alt="package name" />
       <div className="w-full flex-grow bg-E7EAEE p-7 flex flex-col items-center">
-        <span className="font-bold text-2xl">{packages?.title}</span>
+        <span className="font-bold text-center text-2xl">
+          {packages?.title}
+        </span>
         <span className="text-center text-md lg:text-lg mt-2">
           {packages?.description}
         </span>
