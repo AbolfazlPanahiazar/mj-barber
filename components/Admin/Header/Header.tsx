@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Header: FC = () => {
   const { push } = useRouter();
@@ -11,24 +12,21 @@ const Header: FC = () => {
 
       <div className="w-full block flex-grow sm:flex sm:items-center sm:w-auto">
         <div className="text-sm sm:flex-grow">
-          <a
-            href="#responsive-header"
-            className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4"
-          >
-            Docs
-          </a>
-          <a
-            href="#responsive-header"
-            className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4"
-          >
-            Examples
-          </a>
-          <a
-            href="#responsive-header"
-            className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white"
-          >
-            Blog
-          </a>
+          <Link href="/admin/package" passHref>
+            <a className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4">
+              Packages
+            </a>
+          </Link>
+          <Link href="/admin/barbers" passHref>
+            <a className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white mr-4">
+              BarBers
+            </a>
+          </Link>
+          <Link href="/admin/orders" passHref>
+            <a className="block mt-4 sm:inline-block sm:mt-0 text-teal-200 hover:text-white">
+              Orders
+            </a>
+          </Link>
         </div>
       </div>
     </nav>

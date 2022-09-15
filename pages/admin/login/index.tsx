@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-import { login } from "../../../api/login";
+import { login } from "../../../api";
 import { useAuth } from "../../../hooks/useAuth";
 
 export interface IInputs {
@@ -23,7 +23,7 @@ const Admin: NextPage = () => {
     login(userName, password)
       .then((res) => {
         saveAuthenticatedUser({ token: res.data.token });
-        push("/admin/home");
+        push("/admin/package");
       })
       .catch((error) => {
         console.log("error", error.message);
