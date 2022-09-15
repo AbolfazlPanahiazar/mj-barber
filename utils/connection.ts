@@ -37,6 +37,7 @@ export const connect = async () => {
     phoneNumber: { type: String, required: true },
     barberId: { type: String, required: true },
     datetime: { type: String, required: true },
+    email: { type: String, required: true },
     address: { type: String, required: true },
     packageIds: { type: [String], required: true },
   });

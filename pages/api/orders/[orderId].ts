@@ -31,6 +31,11 @@ const orderSchema = Joi.object({
     "string.empty": `"date time" cannot be an empty field`,
     "any.required": `"date time" is a required field`,
   }),
+  email: Joi.string().required().min(5).messages({
+    "string.base": `"email" should be a type of 'date'`,
+    "string.empty": `"email" cannot be an empty field`,
+    "any.required": `"email" is a required field`,
+  }),
   address: Joi.string().required().min(10).messages({
     "string.base": `"address" should be a type of 'text'`,
     "string.empty": `"address" cannot be an empty field`,
@@ -73,6 +78,7 @@ export default connect()
             phoneNumber: req.body.phoneNumber,
             barberId: req.body.barberId,
             datetime: req.body.datetime,
+            email: req.body.email,
             address: req.body.address,
             packageIds: req.body.packageIds,
           },
