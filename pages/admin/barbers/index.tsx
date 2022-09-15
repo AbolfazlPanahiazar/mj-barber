@@ -1,14 +1,57 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import Header from "components/Admin/Header/Header";
+import { postBarbers, getBarbers, editBarbers, deleteBarbers } from "api";
+import { FiEdit, FiDelete } from "react-icons/fi";
+
+interface IBarbers {
+  _id: string;
+  fullname: string;
+  __V: number;
+}
 
 const Barber: NextPage = () => {
-  const [isCreateBarberOpen, setIsCreateBarberOpen] =
-    useState<Boolean>(false);
+  const [isCreateBarberOpen, setIsCreateBarberOpen] = useState<Boolean>(false);
   const [isEditBarberOpen, setIsEditBarberOpen] = useState<Boolean>(false);
+  const [barbers, setBarbers] = useState<IBarbers[]>([]);
+  const [fullName, setFullName] = useState<string>("");
+  const [barberId, setBarberId] = useState<string>("");
+
+  useEffect(() => {
+    getBarbers()
+      .then((res) => {
+        setBarbers(res.data.barbers);
+      })
+      .catch((error) => toast.error(`${error.response.data.message}`));
+  }, [barbers]);
+
+  const createBarberHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    postBarbers(fullName)
+      .then((res) => {
+        setIsCreateBarberOpen(false);
+        toast.success(`${res.data.message}`);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+      });
+  };
+
+  const editBarberHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    editBarbers(fullName, barberId)
+      .then((res) => {
+        setIsEditBarberOpen(false);
+        toast.success(`${res.data.message}`);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+      });
+  };
 
   return (
     <>
@@ -22,158 +65,94 @@ const Barber: NextPage = () => {
         <div className="flex space-x-2 justify-end mx-10">
           <button
             type="button"
-            onClick={() => setIsCreateBarberOpen(true)}
+            onClick={() => {
+              setFullName("");
+              setIsCreateBarberOpen(true);
+            }}
             className="inline-block px-6 py-2.5 bg-E7EAEE text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-F2F5F7 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
           >
-            Button
+            Create Barber
           </button>
         </div>
 
         {isCreateBarberOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
+          <div className=" bg-indigo-100 flex justify-center items-center my-5">
             <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
+              <form
+                onSubmit={createBarberHandler}
+                className="bg-white p-10 rounded-lg shadow-lg min-w-full"
+              >
                 <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-                  Formregister
+                  Create Barber
                 </h1>
                 <div>
                   <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Username
+                    FullName
                   </label>
                   <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="username"
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="FullName"
                   />
                 </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="@email"
-                  />
+                <div className="flex items-center justify-around">
+                  <button
+                    type="submit"
+                    className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+                  >
+                    Register
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsCreateBarberOpen(false);
+                    }}
+                    className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+                  >
+                    Cancell
+                  </button>
                 </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="password"
-                    id="password"
-                    placeholder="password"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Confirm password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="confirm"
-                    id="confirm"
-                    placeholder="confirm password"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Register
-                </button>
-                <button
-                  type="submit"
-                  onClick={() => {
-                    setIsCreateBarberOpen(false);
-                  }}
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Cancell
-                </button>
               </form>
             </div>
           </div>
         ) : null}
 
         {isEditBarberOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
+          <div className=" bg-indigo-100 flex justify-center items-center my-5">
             <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
+              <form
+                onSubmit={editBarberHandler}
+                className="bg-white p-10 rounded-lg shadow-lg min-w-full"
+              >
                 <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-                  Formregister
+                  Edit Barber
                 </h1>
                 <div>
                   <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Username
+                    FullName
                   </label>
                   <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="username"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="fullname"
                   />
                 </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="@email"
-                  />
+                <div className="flex items-center justify-around">
+                  <button
+                    type="submit"
+                    className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+                  >
+                    Register
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsEditBarberOpen(false);
+                    }}
+                    className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+                  >
+                    Cancell
+                  </button>
                 </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="password"
-                    id="password"
-                    placeholder="password"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Confirm password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="confirm"
-                    id="confirm"
-                    placeholder="confirm password"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Register
-                </button>
-                <button
-                  type="submit"
-                  onClick={() => {
-                    setIsEditBarberOpen(false);
-                  }}
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Cancell
-                </button>
               </form>
             </div>
           </div>
@@ -184,77 +163,57 @@ const Barber: NextPage = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="py-3 px-6">
-                  Product name
+                  Barber name
                 </th>
-                <th scope="col" className="py-3 px-6">
-                  Color
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Category
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Price
-                </th>
+
                 <th scope="col" className="py-3 px-6">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Microsoft Surface Pro
-                </th>
-                <td className="py-4 px-6">White</td>
-                <td className="py-4 px-6">Laptop PC</td>
-                <td className="py-4 px-6">$1999</td>
-                <td className="py-4 px-6 flex">
-                  <button
-                    type="button"
-                    onClick={() => setIsEditBarberOpen(true)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
-                  >
-                    Edit
-                  </button>
+              {barbers.map((bar) => {
+                return (
+                  <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th
+                      scope="row"
+                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {bar.fullname}
+                    </th>
 
-                  <button
-                    type="button"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Microsoft Surface Pro
-                </th>
-                <td className="py-4 px-6">White</td>
-                <td className="py-4 px-6">Laptop PC</td>
-                <td className="py-4 px-6">$1999</td>
-                <td className="py-4 px-6 flex">
-                  <button
-                    type="button"
-                    onClick={() => setIsEditBarberOpen(true)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
-                  >
-                    Edit
-                  </button>
+                    <td className="py-4 px-6 flex">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFullName(bar.fullname);
+                          setBarberId(bar._id);
+                          setIsEditBarberOpen(true);
+                        }}
+                        className="text-2xl hover:underline mx-2"
+                      >
+                        <FiEdit />
+                      </button>
 
-                  <button
-                    type="button"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+                      <button
+                        type="button"
+                        className="text-2xl hover:underline mx-2"
+                        onClick={() => {
+                          deleteBarbers(bar._id)
+                            .then((res) => {
+                              toast.success(`${res.data.message}`);
+                            })
+                            .catch((err) => {
+                              toast.error(`${err.response.data.message}`);
+                            });
+                        }}
+                      >
+                        <FiDelete />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
