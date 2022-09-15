@@ -22,16 +22,13 @@ const Admin: NextPage = () => {
     event.preventDefault();
     login(userName, password)
       .then((res) => {
-        console.log("res", res);
         saveAuthenticatedUser({ token: res.data.token });
+        push("/admin/home");
       })
       .catch((error) => {
         console.log("error", error.message);
       });
   };
-
-  // console.log('userName' ,userName);
-  // console.log('password' ,password);
 
   return (
     <>
@@ -50,12 +47,12 @@ const Admin: NextPage = () => {
         >
           <h1 className="text-center text-3xl">MJ Admin Login</h1>
           <div className="flex flex-col ml-2 space-y-2">
-            <label className="text-sm font-light">Email</label>
+            <label className="text-sm font-light">UserName</label>
             <input
               className="sm:w-96 w-72 px-3 py-2 rounded-md border border-slate-400"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              placeholder="Your Email"
+              placeholder="Your UserName"
             />
           </div>
           <div className="flex flex-col ml-2 space-y-2">
