@@ -4,7 +4,7 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 
 import Header from "components/Admin/Header/Header";
-import { getPackages, postPackage } from "api";
+import { getPackages, postPackage, deletePackage, editPackage } from "api";
 
 interface IPackages {
   title: string;
@@ -28,6 +28,7 @@ const Package: NextPage = () => {
   const [priceEUR, setPriceEUR] = useState<number>(0);
   const [priceUSD, setPriceUSD] = useState<number>(0);
   const [priceTRY, setPriceTRY] = useState<number>(0);
+  const [editId, setEditId] = useState<string>("");
 
   useEffect(() => {
     getPackages()
@@ -48,6 +49,38 @@ const Package: NextPage = () => {
       description: description,
       image: imageUrl,
     })
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log(err));
+  };
+
+  const deletePackageHandler = (id: string) => {
+    deletePackage(id)
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log(err));
+  };
+
+  const editSetValues = (p: IPackages) => {
+    setTitle(p.title);
+    setDescription(p.description);
+    setPriceEUR(p.priceEUR);
+    setPriceTRY(p.priceTRY);
+    setPriceUSD(p.priceUSD);
+    setImageUrl(p.image);
+    setEditId(p._id);
+  };
+
+  const editPackageHandler = () => {
+    editPackage(
+      {
+        title: title,
+        priceTRY: priceTRY,
+        priceUSD: priceUSD,
+        priceEUR: priceEUR,
+        description: description,
+        image: imageUrl,
+      },
+      editId
+    )
       .then((res) => console.log("res", res))
       .catch((err) => console.log(err));
   };
@@ -86,7 +119,6 @@ const Package: NextPage = () => {
                     Title
                   </label>
                   <input
-                    value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="Title"
@@ -98,7 +130,6 @@ const Package: NextPage = () => {
                   </label>
                   <textarea
                     rows={4}
-                    value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 "
                     placeholder="Your description..."
@@ -110,7 +141,6 @@ const Package: NextPage = () => {
                       priceTRY
                     </label>
                     <input
-                      value={priceTRY}
                       onChange={(e) => setPriceTRY(+e.target.value)}
                       className="shadow appearance-none border rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="number"
@@ -121,7 +151,6 @@ const Package: NextPage = () => {
                       priceUSD
                     </label>
                     <input
-                      value={priceUSD}
                       onChange={(e) => setPriceUSD(+e.target.value)}
                       className="shadow appearance-none border rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="number"
@@ -132,7 +161,6 @@ const Package: NextPage = () => {
                       priceEUR
                     </label>
                     <input
-                      value={priceEUR}
                       onChange={(e) => setPriceEUR(+e.target.value)}
                       className="shadow appearance-none border rounded w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="number"
@@ -144,7 +172,6 @@ const Package: NextPage = () => {
                     Image
                   </label>
                   <input
-                    value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   />
@@ -154,7 +181,7 @@ const Package: NextPage = () => {
                     type="submit"
                     className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
                   >
-                    Register
+                    Create
                   </button>
                   <button
                     onClick={() => {
@@ -173,7 +200,7 @@ const Package: NextPage = () => {
         {isEditPackageOpen ? (
           <div className="h-screen bg-indigo-100 flex justify-center items-center">
             <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
+              <form onSubmit={editPackageHandler} className="bg-white p-10 rounded-lg shadow-lg min-w-full">
                 <h2 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
                   Edit Package
                 </h2>
@@ -250,7 +277,7 @@ const Package: NextPage = () => {
                     type="submit"
                     className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
                   >
-                    Register
+                    Confirm
                   </button>
                   <button
                     onClick={() => {
@@ -296,7 +323,10 @@ const Package: NextPage = () => {
             <tbody>
               {packages.map((pack) => {
                 return (
-                  <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr
+                    key={pack._id}
+                    className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
                     <th
                       scope="row"
                       className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -311,13 +341,16 @@ const Package: NextPage = () => {
                     <td className="py-4 px-6 flex">
                       <button
                         type="button"
-                        onClick={() => setIsEditPackageOpen(true)}
+                        onClick={() => {
+                          editSetValues(pack);
+                          setIsEditPackageOpen(true)}}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
                       >
                         Edit
                       </button>
 
                       <button
+                        onClick={() => deletePackageHandler(pack._id)}
                         type="button"
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       >
