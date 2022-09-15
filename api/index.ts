@@ -8,3 +8,5 @@ export * from "./getBarbers";
 export * from "./postBarbers";
 export * from "./deleteBarber";
 export * from "./editBarber";
+export * from './deleteOrder';
+export * from './getOrders';

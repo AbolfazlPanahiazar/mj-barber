@@ -1,257 +1,125 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import Header from "components/Admin/Header/Header";
+import { getOrders, deleteOrder } from "api";
+import { FiDelete } from "react-icons/fi";
 
-const Orders: NextPage = () => {
-  const [isCreateOrdersOpen, setIsCreateOrdersOpen] =
-    useState<Boolean>(false);
-  const [isEditOrdersOpen, setIsEditOrdersOpen] = useState<Boolean>(false);
+interface IOrders {
+  _id: string;
+  fullname: string;
+  phoneNumber: string;
+  barberId: string;
+  datetime: string;
+  address: string;
+  packageIds: string[];
+  __V: number;
+}
+
+const Order: NextPage = () => {
+  const [Orders, setOrders] = useState<IOrders[]>([]);
+
+  useEffect(() => {
+    getOrders()
+      .then((res) => {
+        console.log(res);
+        setOrders(res.data.Orders);
+      })
+      .catch((error) => toast.error(`${error.response.data.message}`));
+  }, [Orders]);
 
   return (
     <>
       <Head>
-        <title>Admin Page | MJ Barber</title>
+        <title>Admin Page | MJ Order</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
       <div className="flex flex-col">
-        <div className="flex space-x-2 justify-end mx-10">
-          <button
-            type="button"
-            onClick={() => setIsCreateOrdersOpen(true)}
-            className="inline-block px-6 py-2.5 bg-E7EAEE text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-F2F5F7 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-          >
-            Button
-          </button>
-        </div>
-
-        {isCreateOrdersOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
-            <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
-                <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-                  Formregister
-                </h1>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Username
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="username"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="@email"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="password"
-                    id="password"
-                    placeholder="password"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Confirm password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="confirm"
-                    id="confirm"
-                    placeholder="confirm password"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Register
-                </button>
-                <button
-                  type="submit"
-                  onClick={() => {
-                    setIsCreateOrdersOpen(false);
-                  }}
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Cancell
-                </button>
-              </form>
-            </div>
-          </div>
-        ) : null}
-
-        {isEditOrdersOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
-            <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form className="bg-white p-10 rounded-lg shadow-lg min-w-full">
-                <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
-                  Formregister
-                </h1>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Username
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="username"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="@email"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="password"
-                    id="password"
-                    placeholder="password"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-800 font-semibold block my-3 text-md">
-                    Confirm password
-                  </label>
-                  <input
-                    className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-                    type="text"
-                    name="confirm"
-                    id="confirm"
-                    placeholder="confirm password"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Register
-                </button>
-                <button
-                  type="submit"
-                  onClick={() => {
-                    setIsEditOrdersOpen(false);
-                  }}
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
-                >
-                  Cancell
-                </button>
-              </form>
-            </div>
-          </div>
-        ) : null}
-
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg p-10">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="py-3 px-6">
-                  Product name
+                  Order name
+                </th>
+
+                <th scope="col" className="py-3 px-6">
+                  Image
                 </th>
                 <th scope="col" className="py-3 px-6">
-                  Color
+                  price EUR
                 </th>
-                <th scope="col" className="py-3 px-6">
-                  Category
-                </th>
-                <th scope="col" className="py-3 px-6">
-                  Price
-                </th>
+
                 <th scope="col" className="py-3 px-6">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
+              {/* {Orders.map((bar) => {
+                return (
+                  <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th
+                      scope="row"
+                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {bar.fullname}
+                    </th>
+
+                    <td className="py-4 px-6 flex">
+                      <button
+                        type="button"
+                        className="text-2xl hover:underline mx-2"
+                        onClick={() => {
+                          deleteOrder(bar._id)
+                            .then((res) => {
+                              toast.success(`${res.data.message}`);
+                            })
+                            .catch((err) => {
+                              toast.error(`${err.response.data.message}`);
+                            });
+                        }}
+                      >
+                        <FiDelete />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })} */}
+
               <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
                 <th
                   scope="row"
                   className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  Microsoft Surface Pro
+                  test
                 </th>
-                <td className="py-4 px-6">White</td>
-                <td className="py-4 px-6">Laptop PC</td>
-                <td className="py-4 px-6">$1999</td>
-                <td className="py-4 px-6 flex">
-                  <button
-                    type="button"
-                    onClick={() => setIsEditOrdersOpen(true)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
-                  >
-                    Edit
-                  </button>
 
-                  <button
-                    type="button"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Delete
-                  </button>
+                <td className="py-4 px-6">
+                  <img className="w-10" src={""} />
                 </td>
-              </tr>
-              <tr className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Microsoft Surface Pro
-                </th>
-                <td className="py-4 px-6">White</td>
-                <td className="py-4 px-6">Laptop PC</td>
-                <td className="py-4 px-6">$1999</td>
+                <td className="py-4 px-6"> test</td>
+
                 <td className="py-4 px-6 flex">
                   <button
                     type="button"
-                    onClick={() => setIsEditOrdersOpen(true)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
+                    className="text-2xl hover:underline mx-2"
+                    // onClick={() => {
+                    //   deleteOrder('')
+                    //     .then((res) => {
+                    //       toast.success(`${res.data.message}`);
+                    //     })
+                    //     .catch((err) => {
+                    //       toast.error(`${err.response.data.message}`);
+                    //     });
+                    // }}
                   >
-                    Edit
-                  </button>
-
-                  <button
-                    type="button"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Delete
+                    <FiDelete />
                   </button>
                 </td>
               </tr>
@@ -263,4 +131,4 @@ const Orders: NextPage = () => {
   );
 };
 
-export default Orders;
+export default Order;

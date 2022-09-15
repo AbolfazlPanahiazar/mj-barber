@@ -1,9 +1,34 @@
-import { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import Link from "next/link";
+import axios, { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 import PackageCard from "./PackageCard";
 
+interface IPackages {
+  title: string;
+  priceTRY: number;
+  priceUSD: number;
+  priceEUR: number;
+  description: string;
+  image: string;
+  _id: string;
+  __v: number;
+}
+
 const HomePackagesSlider: FC = () => {
+  const [packages, setPackages] = useState<IPackages[]>([]);
+
+  useEffect(() => {
+    axios
+      .get<never, AxiosResponse<any>>("/api/packages")
+      .then((res) => {
+        setPackages(res.data.packages);
+      })
+      .catch((error) => {
+        toast.error(`${error.response.data.message}`);
+      });
+  }, []);
   return (
     <div className="w-full mt-12 lg:mt-20">
       <div className="w-full px-10 lg:px-28 flex items-center justify-center lg:justify-between">
@@ -20,9 +45,21 @@ const HomePackagesSlider: FC = () => {
       </div>
       <div className="w-full px-10 lg:px-28 mt-3 lg:mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <PackageCard />
-          <PackageCard />
-          <PackageCard />
+          <PackageCard
+            packages={packages[0]}
+            packagesIds={[]}
+            setPackagesIds={() => {}}
+          />
+          <PackageCard
+            packages={packages[1]}
+            packagesIds={[]}
+            setPackagesIds={() => {}}
+          />
+          <PackageCard
+            packages={packages[2]}
+            packagesIds={[]}
+            setPackagesIds={() => {}}
+          />
         </div>
       </div>
       <div className="w-full flex justify-center mt-6 lg:hidden">
