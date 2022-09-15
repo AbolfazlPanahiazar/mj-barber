@@ -66,7 +66,27 @@ export default connect()
   )
   .use(authMiddleWare)
   .get(async (req: NextApiRequest, res: NextApiResponse) => {
-    const { Order } = await mongoConnnect();
+    const { Order, Barber, Package } = await mongoConnnect();
     const allOrders = await Order.find();
-    return res.status(200).json({ orders: allOrders });
+    await Promise.all(
+      allOrders.map(async (item) => {
+        const theBarber = await Barber.findById(item.barberId);
+        const barberName = theBarber?.fullname;
+        const packagesTitles = await Promise.all(
+          item.packageIds.map(async (item: string) => {
+            const thePackage = await Package.findById(item);
+            return thePackage?.title;
+          })
+        );
+        return { ...item._doc, barberName, packagesTitles };
+      })
+    )
+      .then((result) => {
+        return res.status(200).json({ orders: result });
+      })
+      .catch(() => {
+        return res
+          .status(400)
+          .json({ message: "There is sth wrong with orders." });
+      });
   });
