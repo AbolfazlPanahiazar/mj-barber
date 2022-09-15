@@ -2,8 +2,11 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import React, { useState, useEffect } from "react";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 import Header from "components/Admin/Header/Header";
+import FileDropZone from "components/Admin/FileDropZone/FileDropZone";
 import { getPackages, postPackage, deletePackage, editPackage } from "api";
 
 interface IPackages {
@@ -35,12 +38,11 @@ const Package: NextPage = () => {
       .then((res) => {
         setPackages(res.data.packages);
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => toast.error(`${err.response.data.message}`));
+  }, [packages]);
 
-  console.log("packages", packages);
-
-  const createPackageHandler = () => {
+  const createPackageHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     postPackage({
       title: title,
       priceTRY: priceTRY,
@@ -49,14 +51,23 @@ const Package: NextPage = () => {
       description: description,
       image: imageUrl,
     })
-      .then((res) => console.log("res", res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success(`${res.data.message}`);
+        setIsCreatePackageOpen(false);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+      });
   };
 
   const deletePackageHandler = (id: string) => {
     deletePackage(id)
-      .then((res) => console.log("res", res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success(`${res.data.message}`);
+      })
+      .catch((err) => {
+        toast.error(`${err.response.data.message}`);
+      });
   };
 
   const editSetValues = (p: IPackages) => {
@@ -69,7 +80,8 @@ const Package: NextPage = () => {
     setEditId(p._id);
   };
 
-  const editPackageHandler = () => {
+  const editPackageHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     editPackage(
       {
         title: title,
@@ -81,8 +93,11 @@ const Package: NextPage = () => {
       },
       editId
     )
-      .then((res) => console.log("res", res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success(`${res.data.message}`);
+        setIsEditPackageOpen(false);
+      })
+      .catch((err) => toast.error(`${err.response.data.message}`));
   };
 
   return (
@@ -97,7 +112,15 @@ const Package: NextPage = () => {
         <div className="flex space-x-2 justify-end mx-10">
           <button
             type="button"
-            onClick={() => setIsCreatePackageOpen(true)}
+            onClick={() => {
+              setTitle("");
+              setDescription("");
+              setPriceEUR(0);
+              setPriceTRY(0);
+              setPriceUSD(0);
+              setImageUrl("");
+              setIsCreatePackageOpen(true);
+            }}
             className="inline-block px-6 py-2.5 bg-E7EAEE text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-F2F5F7 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
           >
             Create Package
@@ -105,7 +128,7 @@ const Package: NextPage = () => {
         </div>
 
         {isCreatePackageOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
+          <div className="h-screen bg-indigo-100 flex justify-center items-center mt-5">
             <div className="lg:w-2/5 md:w-1/2 w-2/3">
               <form
                 onSubmit={createPackageHandler}
@@ -171,10 +194,7 @@ const Package: NextPage = () => {
                   <label className="text-gray-800 font-semibold block my-3 text-md">
                     Image
                   </label>
-                  <input
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
+                  <FileDropZone setFileUrl={setImageUrl} file={imageUrl} />
                 </div>
                 <div className="flex items-center justify-around">
                   <button
@@ -198,9 +218,12 @@ const Package: NextPage = () => {
         ) : null}
 
         {isEditPackageOpen ? (
-          <div className="h-screen bg-indigo-100 flex justify-center items-center">
+          <div className="h-screen bg-indigo-100 flex justify-center items-center mt-5">
             <div className="lg:w-2/5 md:w-1/2 w-2/3">
-              <form onSubmit={editPackageHandler} className="bg-white p-10 rounded-lg shadow-lg min-w-full">
+              <form
+                onSubmit={editPackageHandler}
+                className="bg-white p-10 rounded-lg shadow-lg min-w-full"
+              >
                 <h2 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
                   Edit Package
                 </h2>
@@ -266,11 +289,7 @@ const Package: NextPage = () => {
                   <label className="text-gray-800 font-semibold block my-3 text-md">
                     Image
                   </label>
-                  <input
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
+                  <FileDropZone setFileUrl={setImageUrl} file={imageUrl} />
                 </div>
                 <div className="flex items-center justify-around">
                   <button
@@ -293,7 +312,7 @@ const Package: NextPage = () => {
           </div>
         ) : null}
 
-        <div className="overflow-x-auto relative shadow-md sm:rounded-lg p-10">
+        <div className="overflow-x-auto relative shadow-md sm:rounded-lg p-10 mt-10">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -333,7 +352,9 @@ const Package: NextPage = () => {
                     >
                       {pack.title}
                     </th>
-                    <td className="py-4 px-6"> {pack.image}</td>
+                    <td className="py-4 px-6">
+                      <img className="w-10" src={pack.image} />
+                    </td>
                     <td className="py-4 px-6"> {pack.priceEUR}</td>
                     <td className="py-4 px-6"> {pack.priceTRY}</td>
                     <td className="py-4 px-6"> {pack.priceUSD}</td>
@@ -343,18 +364,19 @@ const Package: NextPage = () => {
                         type="button"
                         onClick={() => {
                           editSetValues(pack);
-                          setIsEditPackageOpen(true)}}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-2"
+                          setIsEditPackageOpen(true);
+                        }}
+                        className="text-2xl hover:underline mx-2"
                       >
-                        Edit
+                        <FiEdit />
                       </button>
 
                       <button
                         onClick={() => deletePackageHandler(pack._id)}
                         type="button"
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        className="text-2xl hover:underline mx-2"
                       >
-                        Delete
+                        <FiDelete />
                       </button>
                     </td>
                   </tr>

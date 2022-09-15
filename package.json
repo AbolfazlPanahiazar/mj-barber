@@ -23,8 +23,10 @@
     "next-joi": "^2.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.2",
     "react-icons": "^4.4.0",
-    "react-photo-album": "^1.16.1"
+    "react-photo-album": "^1.16.1",
+    "react-toastify": "^9.0.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

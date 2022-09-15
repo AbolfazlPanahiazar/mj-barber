@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 import { login } from "../../../api";
 import { useAuth } from "../../../hooks/useAuth";
@@ -26,7 +27,7 @@ const Admin: NextPage = () => {
         push("/admin/package");
       })
       .catch((error) => {
-        console.log("error", error.message);
+        toast.error(`${error.response.data.message}`);
       });
   };
 

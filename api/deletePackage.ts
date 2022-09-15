@@ -5,5 +5,5 @@ import api from "./api";
 interface IResponse {}
 
 export const deletePackage = (id: string) => {
-  return api.delete<AxiosResponse<any>>(`/api/packages/${id}`);
+  return api.delete<never,AxiosResponse<any>>(`/api/packages/${id}`);
 };
