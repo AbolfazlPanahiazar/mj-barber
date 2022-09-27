@@ -39,10 +39,10 @@ const PackageCard: FC<IPackageCardProps> = ({
     <div className="w-full h-full bg-E7EAEE flex flex-col">
       <img className="w-full" src={packages?.image} alt="package name" />
       <div className="w-full flex-grow bg-E7EAEE p-7 flex flex-col items-center">
-        <span className="font-bold text-center text-2xl">
+        <span className="font-bold text-center text-2xl text-191C62">
           {packages?.title}
         </span>
-        <span className="text-center text-md lg:text-lg mt-2">
+        <span className="text-center text-md lg:text-lg mt-2 text-191C62">
           {packages?.description}
         </span>
         <div className="w-full mt-4 text-B95F1E flex justify-center">
