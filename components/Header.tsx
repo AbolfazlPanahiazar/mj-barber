@@ -107,11 +107,11 @@ const Header: FC = () => {
           <div className="h-full flex items-center">
             <a
               target="_blank"
-              href="tel:+905323977073"
+              href="tel:+905411188894"
               className="flex items-center"
             >
               <IoMdCall size={25} color="#B95F1E" className="mr-1" />
-              <span className="text-B95F1E text-xs">+90 532 397 70 73</span>
+              <span className="text-B95F1E text-xs">+90 541 118 88 94</span>
             </a>
           </div>
         </div>
