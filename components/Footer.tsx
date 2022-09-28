@@ -29,11 +29,11 @@ const Footer: FC = () => {
             <div className="mt-2">
               <a
                 target="_blank"
-                href="tel:+905323977073"
+                href="tel:+905411188894"
                 className="flex items-center"
               >
                 <IoMdCall size={25} color="#B95F1E" className="mr-1" />
-                <span className="text-191C62 text-xs">+90 532 397 70 73</span>
+                <span className="text-191C62 text-xs">+90 541 118 88 94</span>
               </a>
             </div>
             <div className="mt-2">
