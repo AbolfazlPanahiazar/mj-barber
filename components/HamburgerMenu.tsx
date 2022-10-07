@@ -99,7 +99,7 @@ const HamburgerMenu: FC<IHamburgerMenuProps> = ({ isOpen, closeMenu }) => {
         <a target="_blank" href="https://instagram.com/hairsalon_mj">
           <AiFillInstagram size={25} color="#B95F1E" className="mr-1" />
         </a>
-        <a target="_blank" href="https://wa.me/+905323977073">
+        <a target="_blank" href="https://wa.me/+905411188894">
           <IoLogoWhatsapp size={25} color="#B95F1E" />
         </a>
       </div>
