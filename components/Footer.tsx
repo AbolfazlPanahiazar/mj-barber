@@ -72,11 +72,11 @@ const Footer: FC = () => {
               <span>9 AM - 8 PM</span>
             </div>
             <div className="mt-2 flex items-center text-191C62">
-              <span className="font-semibold mr-2">sat:</span>
+              <span className="font-semibold mr-2">Sat:</span>
               <span>9 AM - 8 PM</span>
             </div>
             <div className="mt-2 flex items-center text-191C62">
-              <span className="font-semibold mr-2">Mon:</span>
+              <span className="font-semibold mr-2">Sun:</span>
               <span>12 AM - 8 PM</span>
             </div>
 
